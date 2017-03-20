@@ -32,6 +32,10 @@
         <!--<div class="col-md-6 media" ng-repeat="channels in channels|orderBy:'-icon'|filter:name">-->
         <div class="col-md-6 media" ng-repeat="channel in channels">
           <!--<a href="{{channel.contactUrl}}" class="media-left">-->
+          <a href="#" ng-click="favorite(channel)" class="media-left">
+            <span class="glyphicon glyphicon-star-empty">
+            <span class="glyphicon glyphicon-star">
+          </a>
           <a href="#" ng-click="play(channel)" class="media-left">
             <img class="img-circle media-object" src="{{channel.icon}}" width="60px" align="left">
           </a>
