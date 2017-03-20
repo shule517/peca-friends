@@ -3,8 +3,8 @@ let app = angular.module('App', []);
 app.controller('mainCtrl', function($scope, $http){
     $scope.channels = [];
 
-    $scope.readYP = () => {
-        $http.get('http://temp.orz.hm/yp/index.txt', {})
+    $scope.readYP = (ypUrl) => {
+        $http.get(ypUrl + 'index.txt', {})
             .success((data, status, headers, config) => {
                 console.log('success');
                 let lines = data.split('\n');
@@ -22,18 +22,23 @@ app.controller('mainCtrl', function($scope, $http){
                         details:elements[5]
                             .replace("&lt;", "<")
                             .replace("&gt;", ">"),
+                        listener:elements[6],
                         type:elements[9],
                         comments:elements[17],
                         icon:'./img/peca.png'
                     };
-                    $scope.channels.push(channel);
+                    // YP情報は追加しない
+                    if (channel.listener >= -1) {
+                        $scope.channels.push(channel);
+                    }
                 });
             })
             .error((data, status, headers, config) => {
                 console.log('error');
             });
     }
-    $scope.readYP();
+    $scope.readYP('http://temp.orz.hm/yp/');
+    $scope.readYP('http://bayonet.ddo.jp/sp/');
 
     $scope.play = (channel) => {
         const exec = require('child_process').execFile;
