@@ -1,9 +1,9 @@
-var app = angular.module('App', []);
+let app = angular.module('App', []);
 
 app.controller('mainCtrl', function($scope, $http){
     $scope.channels = [];
 
-    $scope.readYP = function () {
+    $scope.readYP = () => {
         $http.get('http://temp.orz.hm/yp/index.txt', {})
             .success((data, status, headers, config) => {
                 console.log('success');
@@ -35,7 +35,7 @@ app.controller('mainCtrl', function($scope, $http){
     }
     $scope.readYP();
 
-    $scope.play = function (channel) {
+    $scope.play = (channel) => {
         const exec = require('child_process').execFile;
         console.log('play:' + channel.name);
 
