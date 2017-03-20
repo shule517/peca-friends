@@ -83,6 +83,38 @@ app.controller('mainCtrl', function($scope, $http){
         });
     }
 
+    $scope.searchHistory = (keyword) => {
+        searchHistory($scope.keyword)
+    }
+
+    $scope.searchChannels = []
+    searchHistory = (keyword) => {
+        $scope.searchChannels = []
+        url = 'https://peca-tsu.herokuapp.com/histories?genre=' + keyword
+        $http.get(url, {})
+            .success((data, status, headers, config) => {
+                console.log('success');
+                data.forEach((ch) => {
+                    let lastStartedAt = ch.last_started_at;
+                    let lastDate = new Date(lastStartedAt);
+                    let history = {
+                        name: ch.name,
+                        genre: ch.genre,
+                        details: ch.detail + ' ＠' + getDiff(ch.end_time, Date.now()),
+                        contactUrl: ch.contact_url,
+                        lastStartedAt: ch.start_time,
+                        lastComment: ch.comment,
+                        icon: './img/not-live.png'
+                    }
+                    history.details = history.details.replace('&lt;Open&gt;', '').replace('&lt;Over&gt;', '').replace('&lt;Free&gt;', '')
+                    $scope.searchChannels.push(history)
+                });
+            })
+            .error((data, status, headers, config) => {
+                console.log('error');
+            });
+    }
+
     $scope.channels = [];
     $scope.readYP = (ypUrl) => {
         $http.get(ypUrl + 'index.txt', {})
