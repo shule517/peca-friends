@@ -1,6 +1,8 @@
+let fs = require('fs');
 let app = angular.module('App', []);
 
 app.controller('mainCtrl', function($scope, $http){
+    let jsonFilePath = "favorite.json"
     $scope.channels = [];
 
     $scope.readYP = (ypUrl) => {
@@ -63,6 +65,12 @@ app.controller('mainCtrl', function($scope, $http){
         } else {
             $scope.favoriteChannels.push(channel.name)
         }
+        // お気に入り情報をファイル保存
+        fs.writeFile(jsonFilePath, JSON.stringify($scope.favoriteChannels), (err) => {
+            if (err) {
+                console.log(err);
+            }
+        });
     }
 
     $scope.isFavorite = (channel) => {
