@@ -52,7 +52,20 @@ app.controller('mainCtrl', function($scope, $http){
             exec('peerstplayer/peerstplayer.exe', [streamUrl, 'WMV', channel.name], (err, stdout, stderr) => console.log('error'));
         }
     }
+
+
+    $scope.favoriteChannels = [];
     $scope.favorite = (channel) => {
         console.log("お気に入り:" + channel.name)
+        if ($scope.isFavorite(channel)) {
+            let index = $scope.favoriteChannels.indexOf(channel.name);
+            $scope.favoriteChannels.splice(index, 1);
+        } else {
+            $scope.favoriteChannels.push(channel.name)
+        }
+    }
+
+    $scope.isFavorite = (channel) => {
+        return $scope.favoriteChannels.includes(channel.name);
     }
 });
