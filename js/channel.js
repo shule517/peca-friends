@@ -55,8 +55,8 @@ app.controller('mainCtrl', function($scope, $http){
         }
     }
 
-
     $scope.favoriteChannels = [];
+    try { $scope.favoriteChannels = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8')); } catch (err){ console.log(err) }
     $scope.favorite = (channel) => {
         console.log("お気に入り:" + channel.name)
         if ($scope.isFavorite(channel)) {
