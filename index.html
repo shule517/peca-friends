@@ -96,6 +96,24 @@
           </div>
         </div>
       </div>
+
+
+      <br><br>
+      <h1>お気に入り {{favoriteChannels.length}} channels.</h1>
+      <div class="row" line-height="15px">
+        <div class="col-md-6 media" ng-repeat="channel in favoriteChannels">
+          <a href="#" ng-click="play(channel)" class="media-left">
+            <img class="img-circle media-object" src="{{channel.icon}}" width="60px" align="left">
+          </a>
+          <a href="#" ng-click="favorite(channel)" class="media-left">
+            <span class="glyphicon {{isFavorite(channel) ? 'glyphicon-star' : 'glyphicon-star-empty'}}">
+          </a>
+          <div class="media-body">
+            <h4 class="media-heading"><b>{{channel.name}}</b></h4>
+            <p font-weight="100" style="color: #808080">【{{channel.genre}}】{{channel.details}}</p>
+          </div>
+        </div>
+      </div>
     </section>
   </body>
 </html>

@@ -3,8 +3,28 @@ let app = angular.module('App', []);
 
 app.controller('mainCtrl', function($scope, $http){
     let jsonFilePath = "favorite.json"
-    $scope.channels = [];
 
+    // お気に入り
+    $scope.favoriteChannelNames = [];
+    $scope.favoriteChannels = [];
+    try { $scope.favoriteChannelNames = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8')); } catch (err){ console.log(err) }
+    $scope.favorite = (channel) => {
+        console.log("お気に入り:" + channel.name)
+        if ($scope.isFavorite(channel)) {
+            let index = $scope.favoriteChannelNames.indexOf(channel.name);
+            $scope.favoriteChannelNames.splice(index, 1);
+        } else {
+            $scope.favoriteChannelNames.push(channel.name)
+        }
+        // お気に入り情報をファイル保存
+        fs.writeFile(jsonFilePath, JSON.stringify($scope.favoriteChannelNames), (err) => {
+            if (err) {
+                console.log(err);
+            }
+        });
+    }
+
+    $scope.channels = [];
     $scope.readYP = (ypUrl) => {
         $http.get(ypUrl + 'index.txt', {})
             .success((data, status, headers, config) => {
@@ -33,6 +53,9 @@ app.controller('mainCtrl', function($scope, $http){
                     if (channel.listener >= -1) {
                         $scope.channels.push(channel);
                     }
+                    if ($scope.favoriteChannelNames.includes(channel.name)) {
+                        $scope.favoriteChannels.push(channel);
+                    }
                 });
             })
             .error((data, status, headers, config) => {
@@ -55,25 +78,7 @@ app.controller('mainCtrl', function($scope, $http){
         }
     }
 
-    $scope.favoriteChannels = [];
-    try { $scope.favoriteChannels = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8')); } catch (err){ console.log(err) }
-    $scope.favorite = (channel) => {
-        console.log("お気に入り:" + channel.name)
-        if ($scope.isFavorite(channel)) {
-            let index = $scope.favoriteChannels.indexOf(channel.name);
-            $scope.favoriteChannels.splice(index, 1);
-        } else {
-            $scope.favoriteChannels.push(channel.name)
-        }
-        // お気に入り情報をファイル保存
-        fs.writeFile(jsonFilePath, JSON.stringify($scope.favoriteChannels), (err) => {
-            if (err) {
-                console.log(err);
-            }
-        });
-    }
-
     $scope.isFavorite = (channel) => {
-        return $scope.favoriteChannels.includes(channel.name);
+        return $scope.favoriteChannelNames.includes(channel.name);
     }
 });
