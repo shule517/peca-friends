@@ -79,13 +79,13 @@
       <br><br>
       <h1>配信中 {{channels.length}} channels.</h1>
       <!--<input type="text" ng-model="name.name">-->
-      <div class="row" line-height="15px">
+      <div class="row" line-height="10px">
         <!--<p>{{channels.length}} channels.</p>-->
         <!--<div class="col-md-6 media" ng-repeat="channels in channels|orderBy:'-icon'|filter:name">-->
         <div class="col-md-6 media" ng-repeat="channel in channels">
           <!--<a href="{{channel.contactUrl}}" class="media-left">-->
           <a href="#" ng-click="play(channel)" class="media-left">
-            <img class="img-circle media-object" src="{{channel.icon}}" width="60px" align="left">
+            <img class="img-circle media-object" src="{{channel.icon}}" width="40px" align="left">
           </a>
           <a href="#" ng-click="favorite(channel)" class="media-left">
             <span class="glyphicon {{isFavorite(channel) ? 'glyphicon-star' : 'glyphicon-star-empty'}}">
@@ -100,10 +100,10 @@
 
       <br><br>
       <h1>お気に入り {{favoriteChannels.length}} channels.</h1>
-      <div class="row" line-height="15px">
+      <div class="row" line-height="10px">
         <div class="col-md-6 media" ng-repeat="channel in favoriteChannels">
           <a href="#" ng-click="play(channel)" class="media-left">
-            <img class="img-circle media-object" src="{{channel.icon}}" width="60px" align="left">
+            <img class="img-circle media-object" src="{{channel.icon}}" width="40px" align="left">
           </a>
           <a href="#" ng-click="favorite(channel)" class="media-left">
             <span class="glyphicon {{isFavorite(channel) ? 'glyphicon-star' : 'glyphicon-star-empty'}}">

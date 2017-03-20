@@ -1,6 +1,31 @@
 let fs = require('fs');
 let app = angular.module('App', []);
 
+/*
+ *日付の差分日数を返却します。
+ */
+function getDiff(date1Str, date2Str) {
+	var date1 = new Date(date1Str);
+	var date2 = new Date(date2Str);
+
+	// getTimeメソッドで経過ミリ秒を取得し、２つの日付の差を求める
+	var msDiff = date2.getTime() - date1.getTime();
+
+	// 求めた差分（ミリ秒）を日付へ変換します（経過ミリ秒÷(1000ミリ秒×60秒×60分×24時間)。端数切り捨て）
+	var minitesDiff = Math.floor(msDiff / (1000 * 60));
+	var hoursDiff = Math.floor(msDiff / (1000 * 60 * 60));
+	var daysDiff = Math.floor(msDiff / (1000 * 60 * 60 *24));
+
+    if (daysDiff > 0) {
+        return daysDiff + "日前"
+    } else if (hoursDiff > 0) {
+        return hoursDiff + "時間前"
+    } else if (minitesDiff > 0) {
+        return minitesDiff + "分前"
+    }
+	return "";
+}
+
 app.controller('mainCtrl', function($scope, $http){
     let jsonFilePath = "favorite.json"
 
@@ -10,15 +35,18 @@ app.controller('mainCtrl', function($scope, $http){
             .success((data, status, headers, config) => {
                 console.log('success');
                 if (data.length > 0) {
+                    let lastStartedAt = data[0].last_started_at;
+                    let lastDate = new Date(lastStartedAt);
                     let history = {
                         name: data[0].name,
                         genre: data[0].last_genre,
-                        details: data[0].last_detail,
+                        details: data[0].last_detail + ' ＠' + getDiff(lastDate, Date.now()),
                         contactUrl: data[0].contact_url,
-                        lastStartedAt: data[0].last_started_at,
+                        lastStartedAt: lastStartedAt,
                         lastComment: data[0].last_comment,
                         icon: './img/not-live.png'
                     }
+                    history.details = history.details.replace('&lt;Open&gt;', '').replace('&lt;Over&gt;', '').replace('&lt;Free&gt;', '')
                     if (!$scope.favoriteChannels.map((ch) => { return ch.name; }).includes(channelName)) {
                         // いなければ追加
                         $scope.favoriteChannels.push(history)
@@ -80,6 +108,7 @@ app.controller('mainCtrl', function($scope, $http){
                         comments:elements[17],
                         icon:'./img/peca.png'
                     };
+                    channel.details = channel.details.replace('<Open>', '').replace('<Free>', '').replace('<Over>', '')
                     // YP情報は追加しない
                     if (channel.listener >= -1) {
                         $scope.channels.push(channel);
