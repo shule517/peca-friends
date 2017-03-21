@@ -90,7 +90,7 @@ app.controller('mainCtrl', function($scope, $http){
     $scope.searchChannels = []
     searchHistory = (keyword) => {
         $scope.searchChannels = []
-        url = 'https://peca-tsu.herokuapp.com/histories?genre=' + keyword
+        url = 'https://peca-tsu.herokuapp.com/histories?keyword=' + keyword
         $http.get(url, {})
             .success((data, status, headers, config) => {
                 console.log('success');
