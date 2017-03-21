@@ -1,0 +1,1 @@
+electron-packager . peca-friends --platform=win32 --arch=ia32
