@@ -26,8 +26,9 @@ function getDiff(date1Str, date2Str) {
 	return "";
 }
 
-app.controller('mainCtrl', function($scope, $http){
+app.controller('mainCtrl', function($scope, $location, $http, $anchorScroll){
     let jsonFilePath = "favorite.json"
+    let portNoFilePath = "port-no.json"
 
     getHistory = (channelName) => {
         url = 'https://peca-tsu.herokuapp.com/channels?name=' + channelName
@@ -62,6 +63,18 @@ app.controller('mainCtrl', function($scope, $http){
     $scope.favoriteChannelNames = [];
     $scope.favoriteChannels = [];
     try { $scope.favoriteChannelNames = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8')); } catch (err){ console.log(err) }
+    try {
+        $scope.portNo = fs.readFileSync(portNoFilePath, 'utf8');
+    }
+    catch (err){
+        fs.writeFile(portNoFilePath, '7144', (err) => {
+            if (err) {
+                console.log(err);
+            }
+        });
+        $scope.portNo = 7144;
+    }
+
 
     $scope.favoriteChannelNames.forEach((channelName) => {
         getHistory(channelName)
@@ -83,7 +96,7 @@ app.controller('mainCtrl', function($scope, $http){
         });
     }
 
-    $scope.searchHistory = (keyword) => {
+    $scope.searchHistory = () => {
         searchHistory($scope.keyword)
     }
 
@@ -114,6 +127,7 @@ app.controller('mainCtrl', function($scope, $http){
                     history.details = history.details.replace('&lt;Open&gt;', '').replace('&lt;Over&gt;', '').replace('&lt;Free&gt;', '')
                     $scope.searchChannels.push(history)
                 });
+                $scope.gotoAnchor('search');
             })
             .error((data, status, headers, config) => {
                 console.log('error');
@@ -173,10 +187,14 @@ app.controller('mainCtrl', function($scope, $http){
     $scope.readYP('http://bayonet.ddo.jp/sp/');
 
     $scope.play = (channel) => {
+        if (channel.icon == './img/not-live.png')
+        {
+            return;
+        }
         const exec = require('child_process').execFile;
         console.log('play:' + channel.name);
 
-        let streamUrl = 'http://localhost:7146/pls/' + channel.id + '?tip=' + channel.tip;
+        let streamUrl = 'http://localhost:' + $scope.portNo + '/pls/' + channel.id + '?tip=' + channel.tip;
         console.log(streamUrl);
         if (channel.type == 'FLV') {
             exec('peerstplayer/peerstplayer.exe', [streamUrl, 'FLV', channel.name], (err, stdout, stderr) => console.log('error'));
@@ -192,6 +210,7 @@ app.controller('mainCtrl', function($scope, $http){
     }
 
     $scope.history = (channel) => {
+        console.log('history:' + channel);
         $scope.searchChannels = []
         url = 'https://peca-tsu.herokuapp.com/histories?name=' + channel.name;
         $http.get(url, {})
@@ -212,11 +231,20 @@ app.controller('mainCtrl', function($scope, $http){
                     history.details = history.details.replace('&lt;Open&gt;', '').replace('&lt;Over&gt;', '').replace('&lt;Free&gt;', '')
                     $scope.searchChannels.push(history)
                 });
+                $scope.gotoAnchor('search');
             })
             .error((data, status, headers, config) => {
                 console.log('error');
             });
     }
+
+    $scope.gotoAnchor = function(id) {
+        $location.hash(id);
+        $anchorScroll();
+
+        // ハッシュクリア
+        $location.url($location.path());
+    };
 
     $scope.isFavorite = (channel) => {
         return $scope.favoriteChannelNames.includes(channel.name);

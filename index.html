@@ -55,7 +55,7 @@
           <div class="form-group">
             <input id="keyword" name="keyword" ng-model="keyword" type="text" class="form-control" placeholder="Search">
           </div>
-          <button ng-click="searchHistory('test')" class="btn btn-default">検索</button>
+          <button ng-click="searchHistory()" class="btn btn-default">検索</button>
         </form>
       </div>
     </nav>    
@@ -67,19 +67,21 @@
         <!--<div class="col-md-6 media" ng-repeat="channels in channels|orderBy:'-icon'|filter:name">-->
         <div class="col-md-6 media" ng-repeat="channel in channels">
           <!--<a href="{{channel.contactUrl}}" class="media-left">-->
-          <a href="#" ng-click="play(channel)" class="media-left">
+          <a href="" ng-click="play(channel)" class="media-left">
             <img class="img-circle media-object" src="{{channel.icon}}" width="40px" align="left">
           </a>
-          <a href="#" ng-click="favorite(channel)" class="media-left">
+          <a href="" ng-click="favorite(channel)" class="media-left">
             <span class="glyphicon {{isFavorite(channel) ? 'glyphicon-star' : 'glyphicon-star-empty'}}">
           </a>
-          <a href="#" ng-click="play(channel)" class="media-left">
+          <!--
+          <a href="" ng-click="play(channel)" class="media-left">
             <span class="glyphicon glyphicon-play"></span>
           </a>
-          <a href="#" ng-click="edit(channel)" class="media-left">
+          -->
+          <a href="" ng-click="edit(channel)" class="media-left">
             <span class="glyphicon glyphicon-comment"></span>
           </a>
-          <a href="#search" ng-click="history(channel)" class="media-left">
+          <a href="" ng-click="history(channel)" class="media-left">
             <span class="glyphicon glyphicon-search"></span>
           </a>
 
@@ -95,11 +97,17 @@
       <h1>お気に入り {{favoriteChannels.length}} channels.</h1>
       <div class="row" line-height="10px">
         <div class="col-md-6 media" ng-repeat="channel in favoriteChannels">
-          <a href="#" ng-click="play(channel)" class="media-left">
+          <a href="" ng-click="play(channel)" class="media-left">
             <img class="img-circle media-object" src="{{channel.icon}}" width="40px" align="left">
           </a>
-          <a href="#" ng-click="favorite(channel)" class="media-left">
+          <a href="" ng-click="favorite(channel)" class="media-left">
             <span class="glyphicon {{isFavorite(channel) ? 'glyphicon-star' : 'glyphicon-star-empty'}}">
+          </a>
+          <a href="" ng-click="edit(channel)" class="media-left">
+            <span class="glyphicon glyphicon-comment"></span>
+          </a>
+          <a href="" ng-click="history(channel)" class="media-left">
+            <span class="glyphicon glyphicon-search"></span>
           </a>
           <div class="media-body">
             <h4 class="media-heading"><b>{{channel.name}}</b></h4>
@@ -114,11 +122,14 @@
         <h1>検索 {{searchChannels.length}} channels.</h1>
         <div class="row" line-height="10px">
           <div class="col-md-6 media" ng-repeat="channel in searchChannels">
-            <a href="#" ng-click="play(channel)" class="media-left">
+            <a href="" ng-click="play(channel)" class="media-left">
               <img class="img-circle media-object" src="{{channel.icon}}" width="40px" align="left">
             </a>
-            <a href="#" ng-click="favorite(channel)" class="media-left">
+            <a href="" ng-click="favorite(channel)" class="media-left">
               <span class="glyphicon {{isFavorite(channel) ? 'glyphicon-star' : 'glyphicon-star-empty'}}">
+            </a>
+            <a href="" ng-click="history(channel)" class="media-left">
+              <span class="glyphicon glyphicon-search"></span>
             </a>
             <div class="media-body">
               <h4 class="media-heading"><b>{{channel.name}}</b></h4>
