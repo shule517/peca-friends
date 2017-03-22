@@ -90,7 +90,12 @@ app.controller('mainCtrl', function($scope, $http){
     $scope.searchChannels = []
     searchHistory = (keyword) => {
         $scope.searchChannels = []
-        url = 'https://peca-tsu.herokuapp.com/histories?keyword=' + keyword
+
+        // 登録されていないチャンネルをpeca-tsuサーバに通知する
+        url = 'https://peca-tsu.herokuapp.com/channels?name=' + keyword;
+        $http.get(url, {});
+
+        url = 'https://peca-tsu.herokuapp.com/histories?keyword=' + keyword;
         $http.get(url, {})
             .success((data, status, headers, config) => {
                 console.log('success');
@@ -141,6 +146,12 @@ app.controller('mainCtrl', function($scope, $http){
                         icon:'./img/peca.png'
                     };
                     channel.details = channel.details.replace('<Open>', '').replace('<Free>', '').replace('<Over>', '')
+
+                    // TODO START
+                    url = 'https://peca-tsu.herokuapp.com/channels?name=' + channel.name;
+                    $http.get(url, {});
+                    // TODO END
+
                     // YP情報は追加しない
                     if (channel.listener >= -1) {
                         $scope.channels.push(channel);
@@ -172,6 +183,39 @@ app.controller('mainCtrl', function($scope, $http){
         } else {
             exec('peerstplayer/peerstplayer.exe', [streamUrl, 'WMV', channel.name], (err, stdout, stderr) => console.log('error'));
         }
+    }
+
+    $scope.edit = (channel) => {
+        const exec = require('child_process').execFile;
+        console.log('edit:' + channel.name + ' ' + channel.contactUrl);
+        exec('peerstplayer/PeerstViewer.exe', [channel.contactUrl], (err, stdout, stderr) => console.log('error'));
+    }
+
+    $scope.history = (channel) => {
+        $scope.searchChannels = []
+        url = 'https://peca-tsu.herokuapp.com/histories?name=' + channel.name;
+        $http.get(url, {})
+            .success((data, status, headers, config) => {
+                console.log('success');
+                data.forEach((ch) => {
+                    let lastStartedAt = ch.last_started_at;
+                    let lastDate = new Date(lastStartedAt);
+                    let history = {
+                        name: ch.name,
+                        genre: ch.genre,
+                        details: ch.detail + ' ＠' + getDiff(ch.end_time, Date.now()),
+                        contactUrl: ch.contact_url,
+                        lastStartedAt: ch.start_time,
+                        lastComment: ch.comment,
+                        icon: './img/not-live.png'
+                    }
+                    history.details = history.details.replace('&lt;Open&gt;', '').replace('&lt;Over&gt;', '').replace('&lt;Free&gt;', '')
+                    $scope.searchChannels.push(history)
+                });
+            })
+            .error((data, status, headers, config) => {
+                console.log('error');
+            });
     }
 
     $scope.isFavorite = (channel) => {

@@ -34,7 +34,7 @@
       <div class="navbar-header">
 
         <!--ブランド名 ロゴ名の表示-->
-        <a class="navbar-brand" href="#">LOGO</a>
+        <a class="navbar-brand" href="#">チャンネル一覧</a>
 
         <!--トグルボタンの設置-->
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav-content">
@@ -47,9 +47,6 @@
 
         <!--リンクのリスト メニューリスト-->
         <ul class="nav navbar-nav">
-          <li><a href="">配信中</a></li>
-          <li><a href="">お気に入り</a></li>
-          <li><a href="">検索</a></li>
         </ul>
 
 
@@ -65,7 +62,6 @@
 
       <br><br>
       <h1>配信中 {{channels.length}} channels.</h1>
-      <!--<input type="text" ng-model="name.name">-->
       <div class="row" line-height="10px">
         <!--<p>{{channels.length}} channels.</p>-->
         <!--<div class="col-md-6 media" ng-repeat="channels in channels|orderBy:'-icon'|filter:name">-->
@@ -77,6 +73,16 @@
           <a href="#" ng-click="favorite(channel)" class="media-left">
             <span class="glyphicon {{isFavorite(channel) ? 'glyphicon-star' : 'glyphicon-star-empty'}}">
           </a>
+          <a href="#" ng-click="play(channel)" class="media-left">
+            <span class="glyphicon glyphicon-play"></span>
+          </a>
+          <a href="#" ng-click="edit(channel)" class="media-left">
+            <span class="glyphicon glyphicon-comment"></span>
+          </a>
+          <a href="#search" ng-click="history(channel)" class="media-left">
+            <span class="glyphicon glyphicon-search"></span>
+          </a>
+
           <div class="media-body">
             <h4 class="media-heading"><b>{{channel.name}}</b></h4>
             <p font-weight="100" style="color: #808080">【{{channel.genre}}】{{channel.details}}</p>
@@ -103,19 +109,21 @@
       </div>
 
 
-      <br><br>
-      <h1>検索 {{searchChannels.length}} channels.</h1>
-      <div class="row" line-height="10px">
-        <div class="col-md-6 media" ng-repeat="channel in searchChannels">
-          <a href="#" ng-click="play(channel)" class="media-left">
-            <img class="img-circle media-object" src="{{channel.icon}}" width="40px" align="left">
-          </a>
-          <a href="#" ng-click="favorite(channel)" class="media-left">
-            <span class="glyphicon {{isFavorite(channel) ? 'glyphicon-star' : 'glyphicon-star-empty'}}">
-          </a>
-          <div class="media-body">
-            <h4 class="media-heading"><b>{{channel.name}}</b></h4>
-            <p font-weight="100" style="color: #808080">【{{channel.genre}}】{{channel.details}}</p>
+      <div id="search">
+        <br><br>
+        <h1>検索 {{searchChannels.length}} channels.</h1>
+        <div class="row" line-height="10px">
+          <div class="col-md-6 media" ng-repeat="channel in searchChannels">
+            <a href="#" ng-click="play(channel)" class="media-left">
+              <img class="img-circle media-object" src="{{channel.icon}}" width="40px" align="left">
+            </a>
+            <a href="#" ng-click="favorite(channel)" class="media-left">
+              <span class="glyphicon {{isFavorite(channel) ? 'glyphicon-star' : 'glyphicon-star-empty'}}">
+            </a>
+            <div class="media-body">
+              <h4 class="media-heading"><b>{{channel.name}}</b></h4>
+              <p font-weight="100" style="color: #808080">【{{channel.genre}}】{{channel.details}}</p>
+            </div>
           </div>
         </div>
       </div>
