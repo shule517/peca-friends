@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<ViewerSettingsInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ReturnSizeOnStart>false</ReturnSizeOnStart>
+  <ReturnSize>
+    <Width>784</Width>
+    <Height>472</Height>
+  </ReturnSize>
+  <ReturnPositionOnStart>false</ReturnPositionOnStart>
+  <ReturnPosition>
+    <X>0</X>
+    <Y>0</Y>
+  </ReturnPosition>
+  <SaveReturnPositionOnClose>false</SaveReturnPositionOnClose>
+  <SaveReturnSizeOnClose>false</SaveReturnSizeOnClose>
+  <OpenLinkBrowser>true</OpenLinkBrowser>
+  <WriteFieldDistance>440</WriteFieldDistance>
+</ViewerSettingsInfo>
